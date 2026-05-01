@@ -437,7 +437,65 @@
     color: var(--rose);
   }
 
-  /* ── ANIMATIONS ── */
+  /* ── DESKTOP SPLIT LAYOUT ── */
+  @media (min-width: 1024px) {
+    body {
+      display: flex;
+    }
+
+    /* Canvas covers only the left pane on desktop */
+    #wc-canvas {
+      width: 50%;
+    }
+
+    /* Left: scrollable content */
+    .left-pane {
+      width: 50%;
+      min-height: 100vh;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Right: fixed image panel */
+    .right-pane {
+      width: 50%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .right-pane img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Nav spans only the left half */
+    nav {
+      width: 50%;
+      left: 0;
+      right: auto;
+    }
+
+    /* Success overlay covers only left pane */
+    .success-overlay {
+      width: 50%;
+      left: 0;
+      right: auto;
+    }
+  }
+
+  /* Mobile/tablet: no split, right pane hidden */
+  @media (max-width: 1023px) {
+    .right-pane { display: none; }
+    .left-pane  { width: 100%; }
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(22px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -458,6 +516,9 @@
 
 <!-- WATERCOLOR CANVAS -->
 <canvas id="wc-canvas"></canvas>
+
+<!-- LEFT PANE -->
+<div class="left-pane">
 
 <!-- NAV -->
 <nav>
@@ -567,8 +628,15 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>Built by Meggie Qu with love</p>
+  <p>With love, Yuan &amp; Denis 🌸</p>
 </footer>
+
+</div><!-- end .left-pane -->
+
+<!-- RIGHT PANE (desktop only) -->
+<div class="right-pane">
+  <img src="rsvp.png" alt="Yuan Zhang baby shower" />
+</div>
 
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="success">
