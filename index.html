@@ -443,9 +443,9 @@
       display: flex;
     }
 
-    /* Canvas covers only the left pane on desktop */
+    /* Canvas stays full screen */
     #wc-canvas {
-      width: 50%;
+      width: 100%;
     }
 
     /* Left: scrollable content */
@@ -465,6 +465,7 @@
       right: 0;
       height: 100vh;
       z-index: 1;
+      padding: 20vh;
     }
 
     .right-pane img {
@@ -473,6 +474,7 @@
       object-fit: cover;
       object-position: center;
       display: block;
+      border-radius: 12px;
     }
 
     /* Nav spans only the left half */
