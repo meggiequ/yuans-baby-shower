@@ -453,6 +453,7 @@
     transform: none;
   }
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -741,7 +742,7 @@
       const res = await fetch('https://api.airtable.com/v0/app1kcQRhdeRaj6za/RSVPs', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer patfPp0DDXjiNkqqT.44151c9b87b12e6d75c7352b7357b8cde134bdb39b37c964934352b340423008',
+          'Authorization': 'Bearer ' + window.AIRTABLE_TOKEN,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
