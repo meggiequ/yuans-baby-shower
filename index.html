@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Baby Shower for Baby Girl 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Gwendolyn:wght@700&family=Playfair+Display:ital,wght@1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blush:    #f5dde2;
+    --rose:     #9e5a6e;
+    --deep:     #7a3a52;
+    --mauve:    #5c2d3f;
+    --sage:     #b8c9b0;
+    --cream:    #fdf6f0;
+    --ivory:    #fff9f5;
+    --text:     #4a3340;
+    --light:    #5e3f50;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--ivory);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── WATERCOLOR CANVAS ── */
+  #wc-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem 2rem;
+    background: rgba(253,246,240,0.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122,58,82,0.18);
+  }
+
+  nav a {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--deep); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    color: var(--deep);
+    letter-spacing: 0.02em;
+    margin: 0 0 0.6rem;
+    opacity: 0;
+  }
+  .hero-eyebrow:first-child { animation: fadeUp 0.7s 0.2s forwards; margin-bottom: 1.8rem; }
+  .hero-eyebrow:nth-of-type(2) { margin-top: 2rem; animation: fadeUp 0.7s 0.6s forwards; }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    line-height: 1.08;
+    color: var(--mauve);
+    margin: 0 0 0.2rem;
+    opacity: 0;
+  }
+  .hero-title:nth-of-type(1) { animation: fadeUp 0.7s 0.4s forwards; }
+  .hero-title:nth-of-type(2) { animation: fadeUp 0.7s 0.8s forwards; }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--deep);
+  }
+
+  .hero-name {
+    font-family: 'Gwendolyn', cursive;
+    font-weight: 700;
+    font-style: normal;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    line-height: 1.1;
+    color: var(--mauve);
+    margin: 0 0 0.2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .hero-details {
+    font-family: 'EB Garamond', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--light);
+    line-height: 2;
+    letter-spacing: 0.054em;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 1.0s forwards;
+  }
+
+  .hero-details strong {
+    font-weight: 600;
+    color: var(--mauve);
+  }
+
+  .hero-host {
+    margin-top: 1.2rem;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--rose);
+    opacity: 0;
+    animation: fadeUp 0.7s 1.2s forwards;
+  }
+
+  .scroll-hint {
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 1.4s forwards, bob 2s 2.2s ease-in-out infinite;
+    color: var(--rose);
+    font-size: 1.4rem;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(8px); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .section-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--blush), transparent);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--mauve);
+    margin-bottom: 1.4rem;
+    line-height: 1.15;
+  }
+  .section-title em { font-style: italic; color: var(--deep); }
+
+  .prose {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--light);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: var(--rose);
+    font-size: 1.3rem;
+    letter-spacing: 0.5rem;
+    margin: 0 auto;
+    opacity: 0.6;
+  }
+
+  /* ── REGISTRY CARDS ── */
+  .registry-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .registry-card {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.3rem 1.6rem;
+    background: white;
+    border: 1px solid var(--blush);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: 0 2px 16px rgba(180,100,130,0.06);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .registry-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(180,100,130,0.14);
+    border-color: var(--rose);
+  }
+
+  .registry-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, var(--blush), #fde8f0);
+    flex-shrink: 0;
+  }
+
+  .registry-text-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--mauve);
+  }
+  .registry-text-sub {
+    font-size: 0.78rem;
+    color: var(--rose);
+    margin-top: 0.15rem;
+  }
+
+  .registry-arrow {
+    margin-left: auto;
+    color: var(--rose);
+    font-size: 1.1rem;
+    opacity: 0.6;
+  }
+
+  /* ── RSVP ── */
+  .rsvp-card {
+    background: white;
+    border: 1px solid var(--blush);
+    border-radius: 20px;
+    padding: 2.4rem 2rem;
+    box-shadow: 0 4px 32px rgba(180,100,130,0.07);
+  }
+
+  /* RSVP status pills */
+  .rsvp-status {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .status-btn {
+    flex: 1;
+    padding: 0.65rem 0.5rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 50px;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .status-btn:hover { border-color: var(--rose); color: var(--deep); }
+  .status-btn.active {
+    background: linear-gradient(135deg, var(--deep), var(--mauve));
+    border-color: transparent;
+    color: white;
+  }
+
+  .form-group {
+    margin-bottom: 1.1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 0.4rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--ivory);
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--rose); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .rsvp-submit {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.8rem;
+    background: linear-gradient(135deg, var(--deep) 0%, var(--mauve) 100%);
+    border: none;
+    border-radius: 50px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 20px rgba(122,58,82,0.35);
+  }
+  .rsvp-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── SUCCESS ── */
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(253,246,240,0.96);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  .success-overlay.visible { display: flex; }
+
+  .success-bloom {
+    font-size: 4rem;
+    animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    margin-bottom: 1.5rem;
+  }
+  @keyframes pop {
+    0%   { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    font-weight: 300;
+    color: var(--mauve);
+    margin-bottom: 0.5rem;
+  }
+  .success-title em { font-style: italic; color: var(--deep); }
+
+  .success-sub {
+    font-size: 1rem;
+    color: var(--light);
+    max-width: 380px;
+    line-height: 1.7;
+  }
+
+  .success-close {
+    margin-top: 2rem;
+    padding: 0.7rem 2.2rem;
+    border: 1.5px solid var(--rose);
+    border-radius: 50px;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--deep);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .success-close:hover { background: var(--deep); color: white; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem 4rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--rose);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- WATERCOLOR CANVAS -->
+<canvas id="wc-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#details">Details</a>
+  <a href="#registry">Registry</a>
+  <a href="#rsvp">RSVP</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <p class="hero-eyebrow">Kindly join us for a</p>
+  <h1 class="hero-title">BABY SHOWER</h1>
+  <p class="hero-eyebrow">in honor of</p>
+  <h2 class="hero-name">Yuan Zhang</h2>
+  <div class="hero-details">
+    <strong>Saturday, May 30, 2026</strong><br>
+    2:00 pm – 5:00 pm<br>
+    11745 Casa Linda Court<br>Dublin, CA 94568
+  </div>
+  <p class="hero-host">Please RSVP by May 23rd</p>
+  <div class="scroll-hint">↓</div>
+</section>
+
+<div class="divider">· · ✿ · ·</div>
+
+<!-- DETAILS -->
+<section id="details">
+  <div class="section-label reveal">The Details</div>
+  <h2 class="section-title reveal">Come celebrate <em>the little one</em> on her way</h2>
+  <p class="prose reveal">
+    A precious baby girl is almost here, and we couldn't be more excited to welcome her into the world! Join us for an afternoon of love, laughter, and all the sweetness that comes with a new beginning. We'd be so honored to have you with us as we shower her mama with all the joy she deserves.
+  </p>
+  <p class="prose reveal" style="margin-top:1rem;">
+    Please RSVP by <strong style="color:var(--mauve)">May 23, 2026</strong> so we can prepare for the celebration.
+  </p>
+</section>
+
+<div class="divider">· · ✿ · ·</div>
+
+<!-- REGISTRY -->
+<section id="registry">
+  <div class="section-label reveal">Gifts &amp; Registry</div>
+  <h2 class="section-title reveal">Your presence is the <em>greatest gift</em></h2>
+  <p class="prose reveal">
+    Simply having you there to celebrate this new chapter means the world to us. If you'd like to bring a little something for the baby, we've put together a registry to help make it easy.
+  </p>
+  <div class="registry-grid reveal">
+    <a href="https://my.babylist.com/qvtuaxfpy" target="_blank" rel="noopener" class="registry-card">
+      <div class="registry-icon">🛍️</div>
+      <div>
+        <div class="registry-text-main">Babylist Registry</div>
+        <div class="registry-text-sub">View the full wish list</div>
+      </div>
+      <div class="registry-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<div class="divider">· · ✿ · ·</div>
+
+<!-- RSVP -->
+<section id="rsvp">
+  <div class="section-label reveal">RSVP</div>
+  <h2 class="section-title reveal">Will you <em>join us?</em></h2>
+  <p class="prose reveal" style="margin-bottom:2rem;">Please let us know by May 23rd — we can't wait to celebrate together.</p>
+
+  <div class="rsvp-card reveal">
+    <!-- Status -->
+    <div class="rsvp-status">
+      <button class="status-btn active" data-status="Going" onclick="selectStatus(this)">Going</button>
+      <button class="status-btn" data-status="Maybe" onclick="selectStatus(this)">Maybe</button>
+      <button class="status-btn" data-status="Can't Go" onclick="selectStatus(this)">Can't Go</button>
+    </div>
+
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="rsvp-name" placeholder="Full name" />
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="rsvp-phone" placeholder="(555) 000-0000" />
+    </div>
+    <div class="form-group">
+      <label>Number of Guests</label>
+      <select id="rsvp-guests">
+        <option value="0">Just me</option>
+        <option value="1">+1</option>
+        <option value="2">+2</option>
+        <option value="3">+3</option>
+        <option value="4">+4</option>
+        <option value="5">+5</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Dietary Restrictions or Notes</label>
+      <textarea id="rsvp-notes" placeholder="Any dietary needs or notes for us?"></textarea>
+    </div>
+
+    <button class="rsvp-submit" onclick="submitRSVP()">Send RSVP</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>With love, Yuan &amp; Denis 🌸</p>
+</footer>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success">
+  <div class="success-bloom">🌸</div>
+  <h2 class="success-title">See you <em>there!</em></h2>
+  <p class="success-sub">Thank you so much for RSVPing — we're so excited to celebrate with you. 🌷</p>
+  <button class="success-close" onclick="closeSuccess()">Close</button>
+</div>
+
+<script>
+  /* ── WATERCOLOR DROP ANIMATION ── */
+  (function () {
+    const canvas = document.getElementById('wc-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const COLORS = [
+      [242, 180, 195],   // blush pink
+      [210, 160, 220],   // soft lavender
+      [170, 210, 165],   // sage green
+      [248, 200, 175],   // warm peach
+      [190, 215, 240],   // powder blue
+      [235, 155, 180],   // rose
+      [220, 190, 235],   // lilac
+    ];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* Each drop: spawns at a random point, spreads outward with an
+       organic wobbly edge, peaks opacity then fades completely      */
+    const drops = [];
+
+    function spawnDrop() {
+      const [r, g, b] = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const maxR = 160 + Math.random() * 200;
+      const wobbles = 6 + Math.floor(Math.random() * 5);
+      const phases  = Array.from({length: wobbles}, () => Math.random() * Math.PI * 2);
+
+      let x, y, tries = 0;
+      do {
+        x = Math.random() * canvas.width;
+        y = Math.random() * canvas.height;
+        tries++;
+      } while (
+        tries < 12 &&
+        drops.some(d => {
+          const dx = d.x - x, dy = d.y - y;
+          return Math.sqrt(dx*dx + dy*dy) < (d.maxR + maxR) * 0.4;
+        })
+      );
+
+      drops.push({
+        x, y,
+        r: 0,
+        progress: 0,       // 0 → 1, drives eased growth
+        maxR,
+        alpha: 0,
+        peakAlpha: 0.22 + Math.random() * 0.13,
+        phase: 'grow',
+        holdFrames: 90 + Math.floor(Math.random() * 70),
+        heldFor: 0,
+        fadeSpeed: 0.0007 + Math.random() * 0.0005,
+        wobbles,
+        phases,
+        wobbleAmp: 18 + Math.random() * 22,
+        r_val: r, g_val: g, b_val: b,
+      });
+    }
+
+    // Stagger initial spawns
+    for (let i = 0; i < 5; i++) {
+      setTimeout(spawnDrop, i * 2000);
+    }
+    setInterval(spawnDrop, 3200);
+
+    function drawDrop(d) {
+      const pts = 180;
+      ctx.beginPath();
+      for (let i = 0; i <= pts; i++) {
+        const angle = (i / pts) * Math.PI * 2;
+        // Layered high-frequency bumps for spiky ink-droplet edge
+        let wobble = 0;
+        for (let w = 0; w < d.wobbles; w++) {
+          const freq = w + 3;
+          const amp  = d.wobbleAmp * (w === 0 ? 1 : 0.45 / w);
+          wobble += Math.sin(angle * freq + d.phases[w] + d.r * 0.008) * amp;
+        }
+        // Extra fine spiky fringe at the perimeter
+        wobble += Math.sin(angle * 17 + d.phases[0]) * (d.wobbleAmp * 0.25 * (d.r / d.maxR));
+        wobble += Math.sin(angle * 31 + d.phases[1]) * (d.wobbleAmp * 0.12 * (d.r / d.maxR));
+        const rr = d.r + wobble;
+        const px = d.x + Math.cos(angle) * rr;
+        const py = d.y + Math.sin(angle) * rr;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      // Watercolor: lighter centre, pigment pools at the edge ring
+      const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r + d.wobbleAmp);
+      const {r_val: r, g_val: g, b_val: b, alpha: a} = d;
+      grad.addColorStop(0,    `rgba(${r},${g},${b},${(a * 0.18).toFixed(3)})`);
+      grad.addColorStop(0.55, `rgba(${r},${g},${b},${(a * 0.55).toFixed(3)})`);
+      grad.addColorStop(0.80, `rgba(${r},${g},${b},${(a * 1.00).toFixed(3)})`);
+      grad.addColorStop(0.92, `rgba(${r},${g},${b},${(a * 0.85).toFixed(3)})`);
+      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
+
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Ivory background
+      ctx.fillStyle = '#fff8f4';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = drops.length - 1; i >= 0; i--) {
+        const d = drops[i];
+
+        if (d.phase === 'grow') {
+          // Accelerate progress faster early, slower late — ease-out cubic
+          const speed = 0.022 * (1 - d.progress * 0.85);
+          d.progress = Math.min(1, d.progress + speed);
+          d.r = d.maxR * Math.pow(d.progress, 0.4);
+          d.alpha = d.peakAlpha * Math.min(1, d.progress * 3);
+          if (d.progress >= 1) { d.phase = 'hold'; d.alpha = d.peakAlpha; }
+        } else if (d.phase === 'hold') {
+          d.r += 0.12;
+          d.heldFor++;
+          if (d.heldFor >= d.holdFrames) d.phase = 'fade';
+        } else {
+          d.r += 0.08;
+          d.alpha -= d.fadeSpeed;
+          if (d.alpha <= 0) { drops.splice(i, 1); continue; }
+        }
+
+        drawDrop(d);
+      }
+
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ── STATUS SELECTION ── */
+  let selectedStatus = 'Going';
+  function selectStatus(btn) {
+    document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedStatus = btn.dataset.status;
+  }
+
+  /* ── RSVP SUBMIT ── */
+  function submitRSVP() {
+    const name = document.getElementById('rsvp-name').value.trim();
+    if (!name) {
+      document.getElementById('rsvp-name').focus();
+      return;
+    }
+    document.getElementById('success').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSuccess() {
+    document.getElementById('success').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  /* ── REVEAL ON SCROLL ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
