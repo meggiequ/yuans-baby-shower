@@ -48,9 +48,39 @@
     justify-content: center;
     gap: 2rem;
     padding: 1rem 2rem;
-    background: rgba(253,246,240,0.82);
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(253,246,240,0.82) 20%,
+      rgba(253,246,240,0.82) 80%,
+      transparent 100%
+    );
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(122,58,82,0.18);
+    -webkit-mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    );
+    border: none;
+  }
+
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(122,58,82,0.18) 20%,
+      rgba(122,58,82,0.18) 80%,
+      transparent 100%
+    );
   }
 
   nav a {
@@ -498,6 +528,23 @@
     .left-pane  { width: 100%; }
   }
 
+  /* ── HERO IMAGE (mobile/tablet only) ── */
+  .hero-image-mobile {
+    position: relative;
+    z-index: 1;
+    padding: 0 2rem 3rem;
+    display: none;
+  }
+  .hero-image-mobile img {
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 1023px) {
+    .hero-image-mobile { display: block; }
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(22px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -543,6 +590,11 @@
   <p class="hero-host">Please RSVP by May 23rd</p>
   <div class="scroll-hint">↓</div>
 </section>
+
+<!-- HERO IMAGE (mobile/tablet only) -->
+<div class="hero-image-mobile">
+  <img src="rsvp.png" alt="Yuan Zhang baby shower" />
+</div>
 
 <div class="divider">· · ✿ · ·</div>
 
