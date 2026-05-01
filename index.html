@@ -527,9 +527,9 @@
   <div class="rsvp-card reveal">
     <!-- Status -->
     <div class="rsvp-status">
-      <button class="status-btn active" data-status="Going" onclick="selectStatus(this)">Going</button>
+      <button class="status-btn active" data-status="Yes" onclick="selectStatus(this)">Going</button>
       <button class="status-btn" data-status="Maybe" onclick="selectStatus(this)">Maybe</button>
-      <button class="status-btn" data-status="Can't Go" onclick="selectStatus(this)">Can't Go</button>
+      <button class="status-btn" data-status="No" onclick="selectStatus(this)">Can't Go</button>
     </div>
 
     <div class="form-group">
@@ -722,14 +722,54 @@
   }
 
   /* ── RSVP SUBMIT ── */
-  function submitRSVP() {
+  async function submitRSVP() {
     const name = document.getElementById('rsvp-name').value.trim();
     if (!name) {
       document.getElementById('rsvp-name').focus();
       return;
     }
-    document.getElementById('success').classList.add('visible');
-    document.body.style.overflow = 'hidden';
+
+    const btn = document.querySelector('.rsvp-submit');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    const guests = document.getElementById('rsvp-guests').value;
+    const notes  = document.getElementById('rsvp-notes').value.trim();
+    const phone  = document.getElementById('rsvp-phone').value.trim();
+
+    try {
+      const res = await fetch('https://api.airtable.com/v0/app1kcQRhdeRaj6za/RSVPs', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer patfPp0DDXjiNkqqT.44151c9b87b12e6d75c7352b7357b8cde134bdb39b37c964934352b340423008',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          records: [{
+            fields: {
+              'Name':                 name,
+              'Phone Number':         phone,
+              'Attending':            selectedStatus,
+              'Plus Ones':            String(guests),
+              'Dietary Restrictions': notes,
+            }
+          }]
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error('Airtable error:', err);
+        throw new Error(err.error?.message || 'Submission failed');
+      }
+
+      document.getElementById('success').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    } catch (e) {
+      alert('Something went wrong — please try again or reach out to the hosts directly. (' + e.message + ')');
+      btn.textContent = 'Send RSVP';
+      btn.disabled = false;
+    }
   }
 
   function closeSuccess() {
