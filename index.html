@@ -453,7 +453,6 @@
     transform: none;
   }
 </style>
-<script src="config.js"></script>
 </head>
 <body>
 
@@ -528,36 +527,41 @@
   <div class="rsvp-card reveal">
     <!-- Status -->
     <div class="rsvp-status">
-      <button class="status-btn active" data-status="Yes" onclick="selectStatus(this)">Going</button>
-      <button class="status-btn" data-status="Maybe" onclick="selectStatus(this)">Maybe</button>
-      <button class="status-btn" data-status="No" onclick="selectStatus(this)">Can't Go</button>
+      <button type="button" class="status-btn active" data-status="Yes" onclick="selectStatus(this)">Going</button>
+      <button type="button" class="status-btn" data-status="Maybe" onclick="selectStatus(this)">Maybe</button>
+      <button type="button" class="status-btn" data-status="No" onclick="selectStatus(this)">Can't Go</button>
     </div>
 
-    <div class="form-group">
-      <label>Your Name</label>
-      <input type="text" id="rsvp-name" placeholder="Full name" />
-    </div>
-    <div class="form-group">
-      <label>Phone Number</label>
-      <input type="tel" id="rsvp-phone" placeholder="(555) 000-0000" />
-    </div>
-    <div class="form-group">
-      <label>Number of Guests</label>
-      <select id="rsvp-guests">
-        <option value="0">Just me</option>
-        <option value="1">+1</option>
-        <option value="2">+2</option>
-        <option value="3">+3</option>
-        <option value="4">+4</option>
-        <option value="5">+5</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Dietary Restrictions or Notes</label>
-      <textarea id="rsvp-notes" placeholder="Any dietary needs or notes for us?"></textarea>
-    </div>
+    <form name="rsvp" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="form-name" value="rsvp" />
+      <input type="hidden" name="attending" id="attending-input" value="Yes" />
 
-    <button class="rsvp-submit" onclick="submitRSVP()">Send RSVP</button>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" name="name" id="rsvp-name" placeholder="Full name" required />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" name="phone" id="rsvp-phone" placeholder="(555) 000-0000" />
+      </div>
+      <div class="form-group">
+        <label>Number of Guests</label>
+        <select name="plus-ones" id="rsvp-guests">
+          <option value="0">Just me</option>
+          <option value="1">+1</option>
+          <option value="2">+2</option>
+          <option value="3">+3</option>
+          <option value="4">+4</option>
+          <option value="5">+5</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Dietary Restrictions or Notes</label>
+        <textarea name="dietary-restrictions" id="rsvp-notes" placeholder="Any dietary needs or notes for us?"></textarea>
+      </div>
+
+      <button type="submit" class="rsvp-submit">Send RSVP</button>
+    </form>
   </div>
 </section>
 
@@ -715,64 +719,38 @@
   })();
 
   /* ── STATUS SELECTION ── */
-  let selectedStatus = 'Going';
+  let selectedStatus = 'Yes';
   function selectStatus(btn) {
     document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectedStatus = btn.dataset.status;
+    document.getElementById('attending-input').value = selectedStatus;
   }
 
-  /* ── RSVP SUBMIT ── */
-  async function submitRSVP() {
-    const name = document.getElementById('rsvp-name').value.trim();
-    if (!name) {
-      document.getElementById('rsvp-name').focus();
-      return;
-    }
-
-    const btn = document.querySelector('.rsvp-submit');
+  /* ── NETLIFY FORM SUBMIT ── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = form.querySelector('.rsvp-submit');
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
-    const guests = document.getElementById('rsvp-guests').value;
-    const notes  = document.getElementById('rsvp-notes').value.trim();
-    const phone  = document.getElementById('rsvp-phone').value.trim();
-
     try {
-      const res = await fetch('https://api.airtable.com/v0/app1kcQRhdeRaj6za/RSVPs', {
+      const data = new FormData(form);
+      await fetch('/', {
         method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + window.AIRTABLE_TOKEN,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          records: [{
-            fields: {
-              'Name':                 name,
-              'Phone Number':         phone,
-              'Attending':            selectedStatus,
-              'Plus Ones':            String(guests),
-              'Dietary Restrictions': notes,
-            }
-          }]
-        })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString(),
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        console.error('Airtable error:', err);
-        throw new Error(err.error?.message || 'Submission failed');
-      }
 
       document.getElementById('success').classList.add('visible');
       document.body.style.overflow = 'hidden';
-    } catch (e) {
-      alert('Something went wrong — please try again or reach out to the hosts directly. (' + e.message + ')');
+    } catch (err) {
+      alert('Something went wrong — please try again or reach out to the hosts directly.');
       btn.textContent = 'Send RSVP';
       btn.disabled = false;
     }
   }
-
   function closeSuccess() {
     document.getElementById('success').classList.remove('visible');
     document.body.style.overflow = '';
