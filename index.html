@@ -891,6 +891,17 @@
 
       if (!res.ok) throw new Error('Submission failed');
 
+      // Fire confirmation SMS (non-blocking — don't fail RSVP if SMS fails)
+      fetch('/.netlify/functions/sms-confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:      document.getElementById('rsvp-name').value.trim(),
+          phone:     document.getElementById('rsvp-phone').value.trim(),
+          attending: selectedStatus,
+        }),
+      }).catch(err => console.warn('SMS failed:', err));
+
       // Hide the RSVP card, show success overlay
       document.querySelector('.rsvp-card').style.display = 'none';
       document.getElementById('success').classList.add('visible');
