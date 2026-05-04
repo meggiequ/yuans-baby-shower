@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guest List · Yuan & Denis Baby Shower</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose:  #9e5a6e;
+    --deep:  #7a3a52;
+    --mauve: #5c2d3f;
+    --light: #5e3f50;
+    --blush: #f5dde2;
+    --ivory: #fff9f5;
+    --text:  #4a3340;
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--ivory);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  /* ── LOCK SCREEN ── */
+  #lock-screen {
+    width: 100%;
+    max-width: 380px;
+    margin: auto;
+    text-align: center;
+    padding-top: 10vh;
+  }
+
+  .lock-icon { font-size: 2.5rem; margin-bottom: 1.2rem; }
+
+  .lock-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--mauve);
+    margin-bottom: 0.4rem;
+  }
+  .lock-title em { font-style: italic; color: var(--deep); }
+
+  .lock-sub {
+    font-size: 0.85rem;
+    color: var(--rose);
+    margin-bottom: 2rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lock-input {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    background: white;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.8rem;
+    transition: border-color 0.2s;
+  }
+  .lock-input:focus { border-color: var(--rose); }
+  .lock-input.error { border-color: #c0392b; animation: shake 0.3s; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-6px); }
+    75%       { transform: translateX(6px); }
+  }
+
+  .lock-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, var(--deep), var(--mauve));
+    border: none;
+    border-radius: 50px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .lock-btn:hover { opacity: 0.88; }
+
+  .lock-error {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: #c0392b;
+    min-height: 1.2rem;
+  }
+
+  /* ── GUEST LIST ── */
+  #guest-screen {
+    display: none;
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .gl-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .gl-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: var(--mauve);
+    margin-bottom: 0.3rem;
+  }
+  .gl-title em { font-style: italic; color: var(--deep); }
+
+  .gl-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+
+  /* Summary pills */
+  .gl-summary {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .pill {
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .pill-going  { background: #e8f5e9; color: #2e7d32; }
+  .pill-maybe  { background: #fff8e1; color: #f57f17; }
+  .pill-no     { background: #fce4ec; color: #c62828; }
+  .pill-total  { background: var(--blush); color: var(--mauve); }
+
+  /* Table */
+  .gl-table-wrap {
+    background: white;
+    border: 1px solid var(--blush);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(180,100,130,0.07);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    background: linear-gradient(135deg, var(--deep), var(--mauve));
+    color: white;
+  }
+
+  th {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--blush);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fff5f7; }
+
+  td {
+    padding: 0.9rem 1.2rem;
+    font-size: 0.92rem;
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .badge-yes    { background: #e8f5e9; color: #2e7d32; }
+  .badge-maybe  { background: #fff8e1; color: #f57f17; }
+  .badge-no     { background: #fce4ec; color: #c62828; }
+
+  .gl-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--rose);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+
+  .gl-loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--rose);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+
+  .gl-refresh {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.6rem 1.6rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 50px;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--deep);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .gl-refresh:hover { background: var(--deep); color: white; }
+
+  .gl-logout {
+    display: block;
+    margin: 1rem auto 0;
+    background: none;
+    border: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rose);
+    cursor: pointer;
+    opacity: 0.7;
+  }
+  .gl-logout:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen">
+  <div class="lock-icon">🔒</div>
+  <h1 class="lock-title">Guest <em>List</em></h1>
+  <p class="lock-sub">Yuan & Denis · Baby Shower · May 30</p>
+  <input class="lock-input" type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') unlock()" />
+  <button class="lock-btn" onclick="unlock()">View Guest List</button>
+  <p class="lock-error" id="lock-error"></p>
+</div>
+
+<!-- GUEST LIST -->
+<div id="guest-screen">
+  <div class="gl-header">
+    <h1 class="gl-title">Guest <em>List</em></h1>
+    <p class="gl-sub">Yuan & Denis · Baby Shower · May 30, 2026</p>
+  </div>
+
+  <div class="gl-summary" id="summary"></div>
+
+  <div class="gl-table-wrap">
+    <div class="gl-loading" id="gl-loading">Loading RSVPs…</div>
+    <table id="gl-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attending</th>
+          <th>Guests</th>
+          <th>Phone</th>
+          <th>Dietary Notes</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody id="gl-body"></tbody>
+    </table>
+    <div class="gl-empty" id="gl-empty" style="display:none">No RSVPs yet — check back soon 🌸</div>
+  </div>
+
+  <button class="gl-refresh" onclick="loadRSVPs()">↻ Refresh</button>
+  <button class="gl-logout" onclick="logout()">Log out</button>
+</div>
+
+<script>
+  const PASSWORD = 'YuanDanis2026';
+
+  function unlock() {
+    const val = document.getElementById('pw-input').value;
+    const err = document.getElementById('lock-error');
+    const inp = document.getElementById('pw-input');
+    if (val === PASSWORD) {
+      sessionStorage.setItem('gl_auth', '1');
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('guest-screen').style.display = 'block';
+      loadRSVPs();
+    } else {
+      err.textContent = 'Incorrect password. Please try again.';
+      inp.classList.add('error');
+      setTimeout(() => inp.classList.remove('error'), 400);
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('gl_auth');
+    document.getElementById('guest-screen').style.display = 'none';
+    document.getElementById('lock-screen').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('lock-error').textContent = '';
+  }
+
+  // Auto-unlock if already authenticated this session
+  if (sessionStorage.getItem('gl_auth') === '1') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('guest-screen').style.display = 'block';
+    loadRSVPs();
+  }
+
+  async function loadRSVPs() {
+    document.getElementById('gl-loading').style.display = 'block';
+    document.getElementById('gl-table').style.display = 'none';
+    document.getElementById('gl-empty').style.display = 'none';
+    document.getElementById('summary').innerHTML = '';
+
+    try {
+      const res = await fetch('/.netlify/functions/guestlist');
+      if (!res.ok) throw new Error('Failed to load');
+      const submissions = await res.json();
+
+      document.getElementById('gl-loading').style.display = 'none';
+
+      if (!submissions.length) {
+        document.getElementById('gl-empty').style.display = 'block';
+        return;
+      }
+
+      // Summary counts
+      const going = submissions.filter(s => s.attending === 'Yes');
+      const maybe = submissions.filter(s => s.attending === 'Maybe');
+      const no    = submissions.filter(s => s.attending === 'No');
+      const totalGuests = submissions.reduce((sum, s) => sum + (parseInt(s.plusOnes) || 0), 0);
+
+      document.getElementById('summary').innerHTML = `
+        <div class="pill pill-total">🌸 ${submissions.length} RSVPs</div>
+        <div class="pill pill-going">✓ ${going.length} Going · +${totalGuests} guests</div>
+        ${maybe.length ? `<div class="pill pill-maybe">? ${maybe.length} Maybe</div>` : ''}
+        ${no.length    ? `<div class="pill pill-no">✗ ${no.length} Can't Go</div>` : ''}
+      `;
+
+      // Populate table
+      const tbody = document.getElementById('gl-body');
+      tbody.innerHTML = submissions.map(s => {
+        const badgeClass = s.attending === 'Yes' ? 'badge-yes' : s.attending === 'Maybe' ? 'badge-maybe' : 'badge-no';
+        const label      = s.attending === 'Yes' ? 'Going' : s.attending === 'Maybe' ? 'Maybe' : "Can't Go";
+        const date       = s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+        return `<tr>
+          <td><strong>${s.name || '—'}</strong></td>
+          <td><span class="status-badge ${badgeClass}">${label}</span></td>
+          <td>${s.plusOnes === '0' ? 'Just me' : '+' + s.plusOnes}</td>
+          <td>${s.phone || '—'}</td>
+          <td>${s.dietaryRestrictions || '—'}</td>
+          <td style="font-size:0.78rem;color:var(--rose)">${date}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('gl-table').style.display = 'table';
+
+    } catch (e) {
+      document.getElementById('gl-loading').textContent = 'Could not load RSVPs. Try refreshing.';
+    }
+  }
+</script>
+</body>
+</html>
