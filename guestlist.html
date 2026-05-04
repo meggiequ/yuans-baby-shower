@@ -347,8 +347,16 @@
 
     try {
       const res = await fetch('/.netlify/functions/guestlist');
-      if (!res.ok) throw new Error('Failed to load');
-      const submissions = await res.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(JSON.stringify(data));
+
+      // If it's a debug object (no rsvp form yet), handle it
+      if (data.debug) {
+        document.getElementById('gl-loading').textContent = 'Debug: ' + JSON.stringify(data);
+        return;
+      }
+
+      const submissions = data;
 
       document.getElementById('gl-loading').style.display = 'none';
 
@@ -389,7 +397,7 @@
       document.getElementById('gl-table').style.display = 'table';
 
     } catch (e) {
-      document.getElementById('gl-loading').textContent = 'Could not load RSVPs. Try refreshing.';
+      document.getElementById('gl-loading').textContent = 'Error: ' + e.message;
     }
   }
 </script>

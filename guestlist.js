@@ -5,21 +5,28 @@ exports.handler = async () => {
   if (!token || !siteId) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Missing environment variables' }),
+      body: JSON.stringify({ error: 'Missing environment variables', token: !!token, siteId: !!siteId }),
     };
   }
 
   try {
-    // Get the form ID for "rsvp"
+    // Get all forms for the site
     const formsRes = await fetch(
       `https://api.netlify.com/api/v1/sites/${siteId}/forms`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    if (!formsRes.ok) {
+      const text = await formsRes.text();
+      return { statusCode: 500, body: JSON.stringify({ error: 'Forms API failed', status: formsRes.status, detail: text }) };
+    }
+
     const forms = await formsRes.json();
     const rsvpForm = forms.find(f => f.name === 'rsvp');
 
     if (!rsvpForm) {
-      return { statusCode: 200, body: JSON.stringify([]) };
+      // Return form names so we can see what Netlify actually named the form
+      return { statusCode: 200, body: JSON.stringify({ debug: 'no rsvp form found', forms: forms.map(f => f.name) }) };
     }
 
     // Get all submissions
@@ -27,14 +34,19 @@ exports.handler = async () => {
       `https://api.netlify.com/api/v1/forms/${rsvpForm.id}/submissions?per_page=100`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    if (!subRes.ok) {
+      const text = await subRes.text();
+      return { statusCode: 500, body: JSON.stringify({ error: 'Submissions API failed', status: subRes.status, detail: text }) };
+    }
+
     const submissions = await subRes.json();
 
-    // Map to clean shape
     const cleaned = submissions.map(s => ({
-      name:                s.data?.name                || '',
-      phone:               s.data?.phone               || '',
-      attending:           s.data?.attending            || '',
-      plusOnes:            s.data?.['plus-ones']        || '0',
+      name:                s.data?.name                    || '',
+      phone:               s.data?.phone                   || '',
+      attending:           s.data?.attending               || '',
+      plusOnes:            s.data?.['plus-ones']           || '0',
       dietaryRestrictions: s.data?.['dietary-restrictions'] || '',
       createdAt:           s.created_at,
     }));
@@ -46,7 +58,6 @@ exports.handler = async () => {
     };
 
   } catch (err) {
-    console.error(err);
-    return { statusCode: 500, body: JSON.stringify({ error: 'Server error' }) };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
