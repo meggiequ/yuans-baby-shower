@@ -3,10 +3,16 @@
 
 [functions]
   directory = "netlify/functions"
-  node_bundler = "esbuild"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
 
 [build.processing]
   skip_processing = false
 
 [build.processing.html]
   pretty_urls = true
+
+# Run reminder at 10am PT (18:00 UTC) on May 27, 2026
+[functions."sms-reminder"]
+  schedule = "0 18 27 5 *"

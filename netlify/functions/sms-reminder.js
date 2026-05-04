@@ -1,11 +1,8 @@
-const { schedule } = require('@netlify/functions');
-
-// Runs at 10am PT on May 27, 2026 (18:00 UTC)
-exports.handler = schedule('0 18 27 5 *', async () => {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken  = process.env.TWILIO_AUTH_TOKEN;
-  const fromNumber = process.env.TWILIO_PHONE_NUMBER;
-  const siteId     = process.env.NETLIFY_SITE_ID;
+exports.handler = async () => {
+  const accountSid   = process.env.TWILIO_ACCOUNT_SID;
+  const authToken    = process.env.TWILIO_AUTH_TOKEN;
+  const fromNumber   = process.env.TWILIO_PHONE_NUMBER;
+  const siteId       = process.env.NETLIFY_SITE_ID;
   const netlifyToken = process.env.NETLIFY_API_TOKEN;
 
   if (!accountSid || !authToken || !fromNumber || !siteId || !netlifyToken) {
@@ -14,7 +11,6 @@ exports.handler = schedule('0 18 27 5 *', async () => {
   }
 
   try {
-    // Fetch all RSVP submissions from Netlify Forms
     const formsRes = await fetch(
       `https://api.netlify.com/api/v1/sites/${siteId}/forms`,
       { headers: { Authorization: `Bearer ${netlifyToken}` } }
@@ -30,15 +26,13 @@ exports.handler = schedule('0 18 27 5 *', async () => {
     const submissions = await subRes.json();
 
     const credentials = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
-
     let sent = 0, skipped = 0;
 
     for (const s of submissions) {
-      const phone    = s.data?.phone || '';
-      const name     = s.data?.name  || 'there';
+      const phone     = s.data?.phone     || '';
+      const name      = s.data?.name      || 'there';
       const attending = s.data?.attending || '';
 
-      // Only remind Going or Maybe guests who have a phone number
       if (!phone || attending === 'No') { skipped++; continue; }
 
       const cleaned = phone.replace(/\D/g, '');
@@ -65,7 +59,6 @@ exports.handler = schedule('0 18 27 5 *', async () => {
         console.error(`Error sending to ${name}:`, err.message);
       }
 
-      // Small delay between messages to avoid Twilio rate limits
       await new Promise(r => setTimeout(r, 200));
     }
 
@@ -76,4 +69,4 @@ exports.handler = schedule('0 18 27 5 *', async () => {
     console.error('Scheduler error:', err);
     return { statusCode: 500 };
   }
-});
+};
